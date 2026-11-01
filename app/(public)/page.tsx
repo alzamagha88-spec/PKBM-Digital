@@ -7,22 +7,17 @@ import Link from 'next/link'
 export default function LandingPage() {
   const [stats, setStats] = useState({ siswa: 0, guru: 0 })
 
-  // Ngambil data statistik asli dari Supabase
+  // Ngambil data statistik via Fungsi RPC (Biar Publik bisa liat angkanya)
   useEffect(() => {
     async function fetchStats() {
-      const { count: countSiswa } = await supabase
-        .from('siswa')
-        .select('*', { count: 'exact', head: true })
-        .eq('status', 'aktif')
-
-      const { count: countGuru } = await supabase
-        .from('guru')
-        .select('*', { count: 'exact', head: true })
-
-      setStats({
-        siswa: countSiswa || 0,
-        guru: countGuru || 0,
-      })
+      const { data, error } = await supabase.rpc('get_public_stats')
+      
+      if (!error && data) {
+        setStats({
+          siswa: data.siswa || 0,
+          guru: data.guru || 0,
+        })
+      }
     }
     fetchStats()
   }, [])
@@ -31,7 +26,7 @@ export default function LandingPage() {
     <div className="bg-gray-50">
       {/* 1. HERO SECTION (Banner Utama) */}
       <section className="relative bg-blue-900 text-white">
-        {/* Gambar Background (Bisa diganti nanti pakai foto gedung sekolah asli) */}
+        {/* Gambar Background (Banner dibiarkan sesuai request) */}
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center opacity-20"></div>
         
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 flex flex-col items-center text-center">
@@ -56,7 +51,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 2. SAMBUTAN KEPALA SEKOLAH (Persis Referensi) */}
+      {/* 2. SAMBUTAN KEPALA SEKOLAH */}
       <section id="profil" className="py-20 bg-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
@@ -67,7 +62,7 @@ export default function LandingPage() {
               <div className="absolute inset-0 bg-blue-700 translate-x-4 translate-y-4 rounded-lg"></div>
               {/* Bingkai Kuning */}
               <div className="absolute inset-0 border-4 border-yellow-400 -translate-x-4 -translate-y-4 rounded-lg"></div>
-              {/* Gambar (Ganti src nanti pakai foto bapak lu) */}
+              {/* Gambar Kepsek */}
               <img 
                 src="/kepsek.jpeg" 
                 alt="Kepala Sekolah" 
@@ -96,7 +91,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 3. STATISTIK SEKOLAH (Otomatis dari Database) */}
+      {/* 3. STATISTIK SEKOLAH */}
       <section className="py-16 bg-blue-900 relative">
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center opacity-10"></div>
         <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
