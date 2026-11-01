@@ -69,7 +69,7 @@ export default function LandingPage() {
               <div className="absolute inset-0 border-4 border-yellow-400 -translate-x-4 -translate-y-4 rounded-lg"></div>
               {/* Gambar (Ganti src nanti pakai foto bapak lu) */}
               <img 
-                src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1000&auto=format&fit=crop" 
+                src="/kepsek.jpeg" 
                 alt="Kepala Sekolah" 
                 className="relative z-10 w-full max-w-sm rounded-lg shadow-xl object-cover aspect-[3/4]"
               />
